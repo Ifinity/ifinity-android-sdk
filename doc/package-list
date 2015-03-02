@@ -1,0 +1,10 @@
+com.getifinity.sdk
+com.getifinity.sdk.auth
+com.getifinity.sdk.components
+com.getifinity.sdk.dataproviders
+com.getifinity.sdk.exceptions
+com.getifinity.sdk.generated
+com.getifinity.sdk.listeners
+com.getifinity.sdk.managers
+com.getifinity.sdk.models
+com.getifinity.sdk.utils
