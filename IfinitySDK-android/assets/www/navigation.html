@@ -1,0 +1,465 @@
+<div style='background:#FFFFFF; font-family: Courier New, Courier; font-size: 10pt; COLOR: #000000; padding-bottom: 0px; padding-left: 0px; padding-right: 0px; padding-top: 0px;'><font color='#3f7f5f'>/*
+<br/>&nbsp;*&nbsp;
+<br/>&nbsp;*/</font>
+<br/><strong><font color='#7f0055'>package</font></strong>&nbsp;mobi.inventica.ifinitydemo.activity;
+<br/>
+<br/><strong><font color='#7f0055'>import</font></strong>&nbsp;java.util.HashMap;
+<br/><strong><font color='#7f0055'>import</font></strong>&nbsp;java.util.List;
+<br/>
+<br/><strong><font color='#7f0055'>import</font></strong>&nbsp;mobi.inventica.ifinitydemo.BaseIfinityActivity;
+<br/><strong><font color='#7f0055'>import</font></strong>&nbsp;mobi.inventica.ifinitydemo.R;
+<br/><strong><font color='#7f0055'>import</font></strong>&nbsp;mobi.inventica.ifinitydemo.customui.ButtonDial;
+<br/><strong><font color='#7f0055'>import</font></strong>&nbsp;mobi.inventica.ifinitydemo.customui.DaxCEMedium;
+<br/><strong><font color='#7f0055'>import</font></strong>&nbsp;mobi.inventica.ifinitydemo.customui.HelveticaNeueLight;
+<br/><strong><font color='#7f0055'>import</font></strong>&nbsp;mobi.inventica.ifinitydemo.customui.HelveticaNeueMedium;
+<br/><strong><font color='#7f0055'>import</font></strong>&nbsp;com.getifinity.sdk.components.IFTileOverlay;
+<br/><strong><font color='#7f0055'>import</font></strong>&nbsp;com.getifinity.sdk.listeners.OnEnterAreaListener;
+<br/><strong><font color='#7f0055'>import</font></strong>&nbsp;com.getifinity.sdk.listeners.OnFloorChangedListener;
+<br/><strong><font color='#7f0055'>import</font></strong>&nbsp;com.getifinity.sdk.listeners.OnUserPositionChangedListener;
+<br/><strong><font color='#7f0055'>import</font></strong>&nbsp;com.getifinity.sdk.managers.IFBluetoothManager;
+<br/><strong><font color='#7f0055'>import</font></strong>&nbsp;com.getifinity.sdk.managers.IFDataManager;
+<br/><strong><font color='#7f0055'>import</font></strong>&nbsp;com.getifinity.sdk.managers.IFIndoorLocationManager;
+<br/><strong><font color='#7f0055'>import</font></strong>&nbsp;com.getifinity.sdk.managers.IFLocationManager;
+<br/><strong><font color='#7f0055'>import</font></strong>&nbsp;com.getifinity.sdk.generated.Area;
+<br/><strong><font color='#7f0055'>import</font></strong>&nbsp;com.getifinity.sdk.generated.Nodes;
+<br/><strong><font color='#7f0055'>import</font></strong>&nbsp;android.content.Context;
+<br/><strong><font color='#7f0055'>import</font></strong>&nbsp;android.hardware.Sensor;
+<br/><strong><font color='#7f0055'>import</font></strong>&nbsp;android.hardware.SensorEvent;
+<br/><strong><font color='#7f0055'>import</font></strong>&nbsp;android.hardware.SensorEventListener;
+<br/><strong><font color='#7f0055'>import</font></strong>&nbsp;android.hardware.SensorManager;
+<br/><strong><font color='#7f0055'>import</font></strong>&nbsp;android.os.AsyncTask;
+<br/><strong><font color='#7f0055'>import</font></strong>&nbsp;android.os.Bundle;
+<br/><strong><font color='#7f0055'>import</font></strong>&nbsp;android.util.SparseArray;
+<br/><strong><font color='#7f0055'>import</font></strong>&nbsp;android.view.LayoutInflater;
+<br/><strong><font color='#7f0055'>import</font></strong>&nbsp;android.view.View;
+<br/><strong><font color='#7f0055'>import</font></strong>&nbsp;android.view.ViewGroup;
+<br/><strong><font color='#7f0055'>import</font></strong>&nbsp;android.widget.BaseAdapter;
+<br/><strong><font color='#7f0055'>import</font></strong>&nbsp;android.widget.CheckBox;
+<br/><strong><font color='#7f0055'>import</font></strong>&nbsp;android.widget.ImageView;
+<br/><strong><font color='#7f0055'>import</font></strong>&nbsp;android.widget.ListView;
+<br/><strong><font color='#7f0055'>import</font></strong>&nbsp;android.widget.RelativeLayout;
+<br/><strong><font color='#7f0055'>import</font></strong>&nbsp;butterknife.ButterKnife;
+<br/><strong><font color='#7f0055'>import</font></strong>&nbsp;butterknife.InjectView;
+<br/><strong><font color='#7f0055'>import</font></strong>&nbsp;butterknife.OnClick;
+<br/>
+<br/><strong><font color='#7f0055'>import</font></strong>&nbsp;com.google.android.gms.maps.CameraUpdateFactory;
+<br/><strong><font color='#7f0055'>import</font></strong>&nbsp;com.google.android.gms.maps.GoogleMap;
+<br/><strong><font color='#7f0055'>import</font></strong>&nbsp;com.google.android.gms.maps.MapFragment;
+<br/><strong><font color='#7f0055'>import</font></strong>&nbsp;com.google.android.gms.maps.model.BitmapDescriptorFactory;
+<br/><strong><font color='#7f0055'>import</font></strong>&nbsp;com.google.android.gms.maps.model.CameraPosition;
+<br/><strong><font color='#7f0055'>import</font></strong>&nbsp;com.google.android.gms.maps.model.LatLng;
+<br/><strong><font color='#7f0055'>import</font></strong>&nbsp;com.google.android.gms.maps.model.Marker;
+<br/><strong><font color='#7f0055'>import</font></strong>&nbsp;com.google.android.gms.maps.model.MarkerOptions;
+<br/><strong><font color='#7f0055'>import</font></strong>&nbsp;com.google.android.gms.maps.model.Polyline;
+<br/><strong><font color='#7f0055'>import</font></strong>&nbsp;com.google.android.gms.maps.model.TileOverlay;
+<br/><strong><font color='#7f0055'>import</font></strong>&nbsp;com.google.android.gms.maps.model.TileOverlayOptions;
+<br/>
+<br/><strong><font color='#7f0055'>public</font></strong>&nbsp;<strong><font color='#7f0055'>class</font></strong>&nbsp;ApiNaviActivity&nbsp;<strong><font color='#7f0055'>extends</font></strong>&nbsp;BaseIfinityActivity&nbsp;<strong><font color='#7f0055'>implements</font></strong>&nbsp;SensorEventListener{
+<br/>
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;<strong><font color='#7f0055'>private</font></strong>&nbsp;<strong><font color='#7f0055'>final</font></strong>&nbsp;<strong><font color='#7f0055'>static</font></strong>&nbsp;String&nbsp;TAG&nbsp;=&nbsp;<font color='#2a00ff'>"ApiNaviActivity"</font>;
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;<strong><font color='#7f0055'>private</font></strong>&nbsp;GoogleMap&nbsp;mMap;
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;<strong><font color='#7f0055'>private</font></strong>&nbsp;LatLng&nbsp;mUserPosition;
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;<strong><font color='#7f0055'>private</font></strong>&nbsp;IFBluetoothManager&nbsp;mBluetoothManager;
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;<strong><font color='#7f0055'>private</font></strong>&nbsp;IFLocationManager&nbsp;mLocationManager;
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;<strong><font color='#7f0055'>private</font></strong>&nbsp;IFIndoorLocationManager&nbsp;mIndoorManager;
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;<strong><font color='#7f0055'>private</font></strong>&nbsp;<strong><font color='#7f0055'>boolean</font></strong>&nbsp;mFirstFix&nbsp;=&nbsp;<strong><font color='#7f0055'>true</font></strong>,&nbsp;mOverlayFlag&nbsp;=&nbsp;<strong><font color='#7f0055'>false</font></strong>;
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;<strong><font color='#7f0055'>private</font></strong>&nbsp;List<Nodes>&nbsp;nodeList;
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;<strong><font color='#7f0055'>private</font></strong>&nbsp;List<Area>&nbsp;areaList;
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;<strong><font color='#7f0055'>private</font></strong>&nbsp;<strong><font color='#7f0055'>int</font></strong>&nbsp;areaPosition;
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;<strong><font color='#7f0055'>private</font></strong>&nbsp;String&nbsp;from_floor,&nbsp;to_floor,&nbsp;to_lat,&nbsp;to_lng;
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;<strong><font color='#7f0055'>private</font></strong>&nbsp;String&nbsp;mAreaName;
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;<strong><font color='#7f0055'>private</font></strong>&nbsp;<strong><font color='#7f0055'>float</font></strong>&nbsp;azimut;
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;<strong><font color='#7f0055'>private</font></strong>&nbsp;TileOverlay&nbsp;mCurrentTile;
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;<strong><font color='#7f0055'>private</font></strong>&nbsp;SparseArray<TileOverlay>&nbsp;mOverlays&nbsp;=&nbsp;<strong><font color='#7f0055'>new</font></strong>&nbsp;SparseArray<TileOverlay>();
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;<strong><font color='#7f0055'>private</font></strong>&nbsp;Marker&nbsp;mUserMarker,&nbsp;mEndRouteMarker;
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;<strong><font color='#7f0055'>private</font></strong>&nbsp;<strong><font color='#7f0055'>int</font></strong>&nbsp;mFloorId;
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;<strong><font color='#7f0055'>private</font></strong>&nbsp;String&nbsp;mTileUrl,&nbsp;mFloorLabel;
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;<strong><font color='#7f0055'>private</font></strong>&nbsp;<strong><font color='#7f0055'>boolean</font></strong>&nbsp;navigationFlag&nbsp;=&nbsp;<strong><font color='#7f0055'>false</font></strong>;
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;<strong><font color='#7f0055'>private</font></strong>&nbsp;Polyline&nbsp;mPolyline;
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;<strong><font color='#7f0055'>private</font></strong>&nbsp;SensorManager&nbsp;mSensorManager;
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;<strong><font color='#7f0055'>private</font></strong>&nbsp;Sensor&nbsp;mAccelerometer;
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;<font color='#646464'>@InjectView</font>(R.id.overlayContainer)&nbsp;RelativeLayout&nbsp;overlayContainer;
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;<font color='#646464'>@InjectView</font>(R.id.compassContainer)&nbsp;RelativeLayout&nbsp;compassContainer;
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;<font color='#646464'>@InjectView</font>(R.id.txtDirection)&nbsp;DaxCEMedium&nbsp;txtDirections;
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;<font color='#646464'>@InjectView</font>(R.id.chCenter)&nbsp;CheckBox&nbsp;chCenter;
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;<font color='#646464'>@InjectView</font>(R.id.txtArea)&nbsp;HelveticaNeueMedium&nbsp;txtArea;
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;<font color='#646464'>@InjectView</font>(R.id.searchList)&nbsp;ListView&nbsp;searchList;
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;<font color='#646464'>@InjectView</font>(R.id.bttnCancel)&nbsp;ButtonDial&nbsp;bttnCancel;
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;<font color='#646464'>@InjectView</font>(R.id.imgCompass)&nbsp;ImageView&nbsp;imgCompass;
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;<font color='#646464'>@InjectView</font>(R.id.txtMeters)&nbsp;HelveticaNeueLight&nbsp;txtMeters;
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;<font color='#646464'>@InjectView</font>(R.id.txtMeters2)&nbsp;HelveticaNeueMedium&nbsp;txtMeters2;
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;<font color='#646464'>@OnClick</font>(R.id.bttnHome)
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;<strong><font color='#7f0055'>public</font></strong>&nbsp;<strong><font color='#7f0055'>void</font></strong>&nbsp;onClickHome(View&nbsp;v){
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;finish();
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;}
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;<font color='#646464'>@OnClick</font>(R.id.bttnCancel)
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;<strong><font color='#7f0055'>public</font></strong>&nbsp;<strong><font color='#7f0055'>void</font></strong>&nbsp;onClickCancel(View&nbsp;v){
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;endNavigation();
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;}
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;<font color='#646464'>@OnClick</font>(R.id.bttnPlaces)
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;<strong><font color='#7f0055'>public</font></strong>&nbsp;<strong><font color='#7f0055'>void</font></strong>&nbsp;onClickPlaces(View&nbsp;v){
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color='#3f7f5f'>/*&nbsp;get&nbsp;list&nbsp;of&nbsp;the&nbsp;areas&nbsp;form&nbsp;IFIndoorLocationManager&nbsp;to&nbsp;start&nbsp;navigating&nbsp;between&nbsp;areas&nbsp;*/</font>
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong><font color='#7f0055'>if</font></strong>(areaList&nbsp;==&nbsp;<strong><font color='#7f0055'>null</font></strong>)
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;areaList&nbsp;=&nbsp;mIndoorManager.getAreas();
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;searchList.setAdapter(<strong><font color='#7f0055'>new</font></strong>&nbsp;ButtonAdapter());
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong><font color='#7f0055'>if</font></strong>(mOverlayFlag){
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;overlayContainer.setVisibility(View.GONE);
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mOverlayFlag&nbsp;=&nbsp;<strong><font color='#7f0055'>false</font></strong>;
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<strong><font color='#7f0055'>else</font></strong>{
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mOverlayFlag&nbsp;=&nbsp;<strong><font color='#7f0055'>true</font></strong>;
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;overlayContainer.setVisibility(View.VISIBLE);
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;}
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;<font color='#646464'>@SuppressWarnings</font>(<font color='#2a00ff'>"deprecation"</font>)
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;<font color='#646464'>@Override</font>
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;<strong><font color='#7f0055'>protected</font></strong>&nbsp;<strong><font color='#7f0055'>void</font></strong>&nbsp;onCreate(Bundle&nbsp;savedInstanceState)&nbsp;{
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong><font color='#7f0055'>super</font></strong>.onCreate(savedInstanceState);
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;setContentView(R.layout.activity_api_navi);
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ButterKnife.inject(<strong><font color='#7f0055'>this</font></strong>);
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color='#3f7f5f'>/*&nbsp;getting&nbsp;instances&nbsp;of&nbsp;three&nbsp;managers,&nbsp;all&nbsp;of&nbsp;them&nbsp;are&nbsp;singleton&nbsp;classes:
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;IFBluetoothMangare&nbsp;is&nbsp;listenening&nbsp;for&nbsp;beacons,&nbsp;checking&nbsp;if&nbsp;they&nbsp;are&nbsp;transmitting&nbsp;and&nbsp;if&nbsp;user&nbsp;is&nbsp;currently&nbsp;inside&nbsp;a&nbsp;building,&nbsp;
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;IFIndoorLocationManager&nbsp;calculates&nbsp;users&nbsp;position,&nbsp;determines&nbsp;floor&nbsp;and&nbsp;area&nbsp;user&nbsp;is&nbsp;currently&nbsp;in,
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;IFLocationManager&nbsp;is&nbsp;responsible&nbsp;for&nbsp;navigation&nbsp;from&nbsp;one&nbsp;point&nbsp;to&nbsp;another,&nbsp;it&nbsp;constructs&nbsp;route,&nbsp;determines&nbsp;distance&nbsp;and&nbsp;angle&nbsp;between&nbsp;user&nbsp;direction&nbsp;and&nbsp;destination&nbsp;point
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;*/</font>
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mBluetoothManager&nbsp;=&nbsp;IFBluetoothManager.getInstance();
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mIndoorManager&nbsp;=&nbsp;IFIndoorLocationManager.getInstance();
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mIndoorManager.startManager(getBaseContext());
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mLocationManager&nbsp;=&nbsp;IFLocationManager.getInstance();
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color='#3f7f5f'>/*&nbsp;registering&nbsp;device&nbsp;sensors&nbsp;(using&nbsp;deprecated&nbsp;TYPE_ORIENTATION)&nbsp;*/</font>
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mSensorManager&nbsp;=&nbsp;(SensorManager)&nbsp;getSystemService(SENSOR_SERVICE);
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mAccelerometer&nbsp;=&nbsp;mSensorManager.getDefaultSensor(Sensor.TYPE_ORIENTATION);
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mMap&nbsp;=&nbsp;((MapFragment)&nbsp;getFragmentManager().findFragmentById(R.id.map))
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.getMap();
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mMap.setMapType(GoogleMap.MAP_TYPE_NONE);
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mMap.getUiSettings().setZoomControlsEnabled(<strong><font color='#7f0055'>false</font></strong>);
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;}
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;<font color='#646464'>@Override</font>
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;<strong><font color='#7f0055'>protected</font></strong>&nbsp;<strong><font color='#7f0055'>void</font></strong>&nbsp;onResume()&nbsp;{
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong><font color='#7f0055'>super</font></strong>.onResume();
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color='#3f7f5f'>/*&nbsp;starts&nbsp;BT&nbsp;listening&nbsp;if&nbsp;it&nbsp;was&nbsp;disabled&nbsp;when&nbsp;app&nbsp;went&nbsp;to&nbsp;the&nbsp;background&nbsp;*/</font>
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong><font color='#7f0055'>if</font></strong>(!mBluetoothManager.isEnabled())
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mBluetoothManager.startManager(getBaseContext());
+<br/>
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color='#3f7f5f'>/*&nbsp;start&nbsp;calculating&nbsp;user's&nbsp;position&nbsp;and&nbsp;add&nbsp;all&nbsp;needed&nbsp;listener&nbsp;interfaces&nbsp;*/</font>
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mIndoorManager.startManager(getBaseContext());
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mIndoorManager.setOnUserPositionChanged(onUserChange);
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mIndoorManager.setOnFloorChangedListener(onFloorChange);
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mIndoorManager.setOnEnterAreaListener(onAreaChange);
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong><font color='#7f0055'>if</font></strong>(navigationFlag)
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mSensorManager.registerListener(<strong><font color='#7f0055'>this</font></strong>,&nbsp;mAccelerometer,&nbsp;SensorManager.SENSOR_DELAY_UI);
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;}
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;<font color='#646464'>@Override</font>
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;<strong><font color='#7f0055'>protected</font></strong>&nbsp;<strong><font color='#7f0055'>void</font></strong>&nbsp;onPause()&nbsp;{
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong><font color='#7f0055'>super</font></strong>.onPause();
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color='#3f7f5f'>/*&nbsp;if&nbsp;app&nbsp;goes&nbsp;to&nbsp;the&nbsp;background,&nbsp;stop&nbsp;listening&nbsp;for&nbsp;beacons&nbsp;and&nbsp;unregister&nbsp;all&nbsp;of&nbsp;the&nbsp;listeners&nbsp;and&nbsp;sensors&nbsp;*/</font>
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mBluetoothManager.stopManager();
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mIndoorManager.stopManager();
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mIndoorManager.removeOnUserPositionChanged(onUserChange);
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mIndoorManager.removeOnFloorChangedListener(onFloorChange);
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mIndoorManager.removeEnterAreaListener(onAreaChange);
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong><font color='#7f0055'>if</font></strong>(navigationFlag)
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mSensorManager.unregisterListener(<strong><font color='#7f0055'>this</font></strong>);
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;}
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;<font color='#646464'>@Override</font>
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;<strong><font color='#7f0055'>public</font></strong>&nbsp;<strong><font color='#7f0055'>void</font></strong>&nbsp;onBackPressed()&nbsp;{
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong><font color='#7f0055'>if</font></strong>(mOverlayFlag){
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mOverlayFlag&nbsp;=&nbsp;<strong><font color='#7f0055'>false</font></strong>;
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;overlayContainer.setVisibility(View.GONE);
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<strong><font color='#7f0055'>else</font></strong>{
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;finish();
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;}
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;<strong><font color='#7f0055'>private</font></strong>&nbsp;<strong><font color='#7f0055'>void</font></strong>&nbsp;endNavigation(){
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bttnCancel.setVisibility(View.INVISIBLE);
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;compassContainer.setVisibility(View.INVISIBLE);
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;navigationFlag&nbsp;=&nbsp;<strong><font color='#7f0055'>false</font></strong>;
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mPolyline.remove();
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mEndRouteMarker.remove();
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mOverlayFlag&nbsp;=&nbsp;<strong><font color='#7f0055'>false</font></strong>;
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;}
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;<font color='#3f7f5f'>/*&nbsp;listener&nbsp;responsible&nbsp;for&nbsp;updating&nbsp;UI&nbsp;when&nbsp;user&nbsp;enters&nbsp;new&nbsp;area,&nbsp;provides&nbsp;name&nbsp;of&nbsp;the&nbsp;area,&nbsp;it's&nbsp;Id,&nbsp;content&nbsp;Id&nbsp;and&nbsp;name&nbsp;assigned&nbsp;to&nbsp;this&nbsp;specific&nbsp;area&nbsp;*/</font>
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;<strong><font color='#7f0055'>private</font></strong>&nbsp;OnEnterAreaListener&nbsp;onAreaChange&nbsp;=&nbsp;<strong><font color='#7f0055'>new</font></strong>&nbsp;OnEnterAreaListener(){
+<br/>
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color='#646464'>@Override</font>
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong><font color='#7f0055'>public</font></strong>&nbsp;<strong><font color='#7f0055'>void</font></strong>&nbsp;areaChanged(String&nbsp;areaName,&nbsp;<strong><font color='#7f0055'>int</font></strong>&nbsp;areaId,&nbsp;<strong><font color='#7f0055'>int</font></strong>&nbsp;contentId,&nbsp;String&nbsp;contentName)&nbsp;{
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mAreaName&nbsp;=&nbsp;areaName;
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color='#3f7f5f'>//&nbsp;runOnUiThread&nbsp;beacause&nbsp;all&nbsp;of&nbsp;the&nbsp;managers&nbsp;work&nbsp;is&nbsp;done&nbsp;in&nbsp;another&nbsp;thread
+</font><br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;runOnUiThread(<strong><font color='#7f0055'>new</font></strong>&nbsp;Runnable(){
+<br/>
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color='#646464'>@Override</font>
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong><font color='#7f0055'>public</font></strong>&nbsp;<strong><font color='#7f0055'>void</font></strong>&nbsp;run()&nbsp;{
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;txtArea.setText(mAreaName);
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;});
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;};
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;<font color='#3f7f5f'>/*&nbsp;listener&nbsp;responsible&nbsp;for&nbsp;updating&nbsp;UI&nbsp;when&nbsp;user&nbsp;enters&nbsp;new&nbsp;floor,&nbsp;provides&nbsp;ID,&nbsp;label&nbsp;and&nbsp;tile&nbsp;URL&nbsp;address,&nbsp;to&nbsp;display&nbsp;users&nbsp;tiles&nbsp;on&nbsp;a&nbsp;map&nbsp;*/</font>
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;<strong><font color='#7f0055'>private</font></strong>&nbsp;OnFloorChangedListener&nbsp;onFloorChange&nbsp;=&nbsp;<strong><font color='#7f0055'>new</font></strong>&nbsp;OnFloorChangedListener(){
+<br/>
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color='#646464'>@Override</font>
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong><font color='#7f0055'>public</font></strong>&nbsp;<strong><font color='#7f0055'>void</font></strong>&nbsp;floorChanged(<strong><font color='#7f0055'>int</font></strong>&nbsp;floorId,&nbsp;String&nbsp;label,&nbsp;String&nbsp;tileUrl)&nbsp;{
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mFloorId&nbsp;=&nbsp;floorId;
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mFloorLabel&nbsp;=&nbsp;label;
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mTileUrl&nbsp;=&nbsp;tileUrl;
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color='#3f7f5f'>/*&nbsp;show&nbsp;new&nbsp;tiles&nbsp;and&nbsp;hide&nbsp;the&nbsp;old&nbsp;ones,&nbsp;once&nbsp;the&nbsp;floor&nbsp;is&nbsp;changed&nbsp;*/</font>
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;runOnUiThread(<strong><font color='#7f0055'>new</font></strong>&nbsp;Runnable(){
+<br/>
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color='#646464'>@Override</font>
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong><font color='#7f0055'>public</font></strong>&nbsp;<strong><font color='#7f0055'>void</font></strong>&nbsp;run()&nbsp;{
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong><font color='#7f0055'>if</font></strong>(mOverlays.get(mFloorId,&nbsp;<strong><font color='#7f0055'>null</font></strong>)&nbsp;==&nbsp;<strong><font color='#7f0055'>null</font></strong>){
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TileOverlay&nbsp;tile&nbsp;=&nbsp;mMap.addTileOverlay(<strong><font color='#7f0055'>new</font></strong>&nbsp;TileOverlayOptions()
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.tileProvider(<strong><font color='#7f0055'>new</font></strong>&nbsp;IFTileOverlay(256,256,&nbsp;mTileUrl)));
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mOverlays.put(mFloorId,&nbsp;tile);
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mCurrentTile&nbsp;=&nbsp;tile;
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<strong><font color='#7f0055'>else</font></strong>{
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TileOverlay&nbsp;tile&nbsp;=&nbsp;mOverlays.get(mFloorId);
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mCurrentTile.setVisible(<strong><font color='#7f0055'>false</font></strong>);
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mCurrentTile&nbsp;=&nbsp;tile;
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mCurrentTile.setVisible(<strong><font color='#7f0055'>true</font></strong>);
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;});
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;};
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;<font color='#3f7f5f'>/*&nbsp;query&nbsp;navigation&nbsp;route,&nbsp;needed&nbsp;parameters:
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;from_lat&nbsp;-&nbsp;current&nbsp;latitude
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;from_lng&nbsp;-&nbsp;current&nbsp;longitude
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;from_floor&nbsp;-&nbsp;floor&nbsp;we're&nbsp;currently&nbsp;on
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;to_lat&nbsp;-&nbsp;destination&nbsp;latitude
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;to_lng&nbsp;-&nbsp;destination&nbsp;longitude
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;to_floor&nbsp;-&nbsp;destination&nbsp;floor
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;&nbsp;*/</font>
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;<strong><font color='#7f0055'>private</font></strong>&nbsp;<strong><font color='#7f0055'>void</font></strong>&nbsp;queryRoute(<strong><font color='#7f0055'>int</font></strong>&nbsp;position){
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LatLng&nbsp;currentPos&nbsp;=&nbsp;mIndoorManager.getCurrentPosition();
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;from_floor&nbsp;=&nbsp;String.valueOf(mIndoorManager.getCurrentFloor());
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;to_lat&nbsp;=&nbsp;String.valueOf(areaList.get(position).getLatitude());
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;to_lng&nbsp;=&nbsp;String.valueOf(areaList.get(position).getLongitude());
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;to_floor&nbsp;=&nbsp;String.valueOf(areaList.get(position).getFloorId());
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;txtDirections.setText(areaList.get(position).getName());
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong><font color='#7f0055'>new</font></strong>&nbsp;AsyncQueryRoute().execute(String.valueOf(currentPos.latitude),&nbsp;String.valueOf(currentPos.longitude)
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;,&nbsp;from_floor,&nbsp;to_lat,&nbsp;to_lng,&nbsp;to_floor);
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;}
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;<font color='#3f7f5f'>/*&nbsp;listener&nbsp;responsible&nbsp;for&nbsp;updating&nbsp;UI&nbsp;when&nbsp;user&nbsp;position&nbsp;changes,&nbsp;provides&nbsp;latitude&nbsp;and&nbsp;longitude&nbsp;*/</font>
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;<strong><font color='#7f0055'>private</font></strong>&nbsp;OnUserPositionChangedListener&nbsp;onUserChange&nbsp;=&nbsp;<strong><font color='#7f0055'>new</font></strong>&nbsp;OnUserPositionChangedListener(){
+<br/>
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color='#646464'>@Override</font>
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong><font color='#7f0055'>public</font></strong>&nbsp;<strong><font color='#7f0055'>void</font></strong>&nbsp;positionChanged(LatLng&nbsp;position)&nbsp;{
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mUserPosition&nbsp;=&nbsp;position;
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;runOnUiThread(<strong><font color='#7f0055'>new</font></strong>&nbsp;Runnable(){
+<br/>
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color='#646464'>@Override</font>
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong><font color='#7f0055'>public</font></strong>&nbsp;<strong><font color='#7f0055'>void</font></strong>&nbsp;run()&nbsp;{
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color='#3f7f5f'>/*&nbsp;if&nbsp;user&nbsp;is&nbsp;navigating&nbsp;between&nbsp;areas&nbsp;*/</font>
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong><font color='#7f0055'>if</font></strong>(navigationFlag){
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color='#3f7f5f'>/*&nbsp;reroute&nbsp;if&nbsp;user&nbsp;departs&nbsp;too&nbsp;far&nbsp;from&nbsp;the&nbsp;route&nbsp;*/</font>
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong><font color='#7f0055'>if</font></strong>(mLocationManager.reroute()){
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;queryRoute(areaPosition);
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<strong><font color='#7f0055'>else</font></strong>{
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color='#3f7f5f'>/*&nbsp;IFLocationManager&nbsp;delivers&nbsp;fixed&nbsp;user&nbsp;position,&nbsp;snapped&nbsp;to&nbsp;the&nbsp;route,&nbsp;direction&nbsp;to&nbsp;the&nbsp;next&nbsp;navigation&nbsp;node&nbsp;and&nbsp;distance&nbsp;to&nbsp;it&nbsp;*/</font>&nbsp;
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LatLng&nbsp;p&nbsp;=&nbsp;mLocationManager.getSnapMarker(mUserPosition,&nbsp;nodeList);
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mUserMarker.setPosition(p);
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;txtMeters.setText(String.valueOf((<strong><font color='#7f0055'>int</font></strong>)(mLocationManager.getDistance()/0.7)));
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;txtMeters2.setText(String.valueOf(mLocationManager.getDistance()));
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;imgCompass.setRotation(mLocationManager.getDirection()&nbsp;-&nbsp;azimut);
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mMap.animateCamera(CameraUpdateFactory.newCameraPosition(<strong><font color='#7f0055'>new</font></strong>&nbsp;CameraPosition(p,&nbsp;mMap.getMaxZoomLevel(),&nbsp;mMap.getMaxZoomLevel(),&nbsp;azimut)),&nbsp;200,&nbsp;<strong><font color='#7f0055'>null</font></strong>);
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong><font color='#7f0055'>if</font></strong>(mLocationManager.ifNavigatingFinished())
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;endNavigation();
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<strong><font color='#7f0055'>else</font></strong>{
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong><font color='#7f0055'>if</font></strong>(chCenter.isChecked()&nbsp;||&nbsp;mFirstFix){
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mMap.animateCamera(CameraUpdateFactory.newCameraPosition(<strong><font color='#7f0055'>new</font></strong>&nbsp;CameraPosition(mUserPosition,&nbsp;mMap.getMaxZoomLevel(),&nbsp;mMap.getMaxZoomLevel(),&nbsp;0)),&nbsp;100,&nbsp;<strong><font color='#7f0055'>null</font></strong>);
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mFirstFix&nbsp;=&nbsp;<strong><font color='#7f0055'>false</font></strong>;
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong><font color='#7f0055'>if</font></strong>(mUserMarker&nbsp;==&nbsp;<strong><font color='#7f0055'>null</font></strong>)
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mUserMarker&nbsp;=&nbsp;mMap.addMarker(<strong><font color='#7f0055'>new</font></strong>&nbsp;MarkerOptions().anchor(0.5f,&nbsp;0.5f)
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.position(mUserPosition)
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.icon(BitmapDescriptorFactory.fromResource(R.drawable.usermarker)));
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong><font color='#7f0055'>else</font></strong>
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mUserMarker.setPosition(mUserPosition);
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;});
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;};
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;<strong><font color='#7f0055'>public</font></strong>&nbsp;<strong><font color='#7f0055'>class</font></strong>&nbsp;ButtonAdapter&nbsp;<strong><font color='#7f0055'>extends</font></strong>&nbsp;BaseAdapter{
+<br/>
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong><font color='#7f0055'>private</font></strong>&nbsp;ViewHolder&nbsp;mViewHolder;
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong><font color='#7f0055'>protected</font></strong>&nbsp;LayoutInflater&nbsp;mInflater;
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong><font color='#7f0055'>public</font></strong>&nbsp;ButtonAdapter(){
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong><font color='#7f0055'>this</font></strong>.mInflater&nbsp;=&nbsp;(LayoutInflater)&nbsp;getBaseContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color='#646464'>@Override</font>
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong><font color='#7f0055'>public</font></strong>&nbsp;<strong><font color='#7f0055'>int</font></strong>&nbsp;getCount()&nbsp;{
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong><font color='#7f0055'>if</font></strong>(areaList&nbsp;!=&nbsp;<strong><font color='#7f0055'>null</font></strong>)
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong><font color='#7f0055'>return</font></strong>&nbsp;areaList.size();
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong><font color='#7f0055'>else</font></strong>
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong><font color='#7f0055'>return</font></strong>&nbsp;0;
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong><font color='#7f0055'>class</font></strong>&nbsp;ViewHolder&nbsp;{
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;HelveticaNeueLight&nbsp;txtRowTitle;
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DaxCEMedium&nbsp;txtFloorId;
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RelativeLayout&nbsp;row;
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br/>
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color='#646464'>@Override</font>
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong><font color='#7f0055'>public</font></strong>&nbsp;Object&nbsp;getItem(<strong><font color='#7f0055'>int</font></strong>&nbsp;arg0)&nbsp;{
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong><font color='#7f0055'>return</font></strong>&nbsp;<strong><font color='#7f0055'>null</font></strong>;
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br/>
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color='#646464'>@Override</font>
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong><font color='#7f0055'>public</font></strong>&nbsp;<strong><font color='#7f0055'>long</font></strong>&nbsp;getItemId(<strong><font color='#7f0055'>int</font></strong>&nbsp;position)&nbsp;{
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong><font color='#7f0055'>return</font></strong>&nbsp;position;
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br/>
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color='#646464'>@Override</font>
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong><font color='#7f0055'>public</font></strong>&nbsp;View&nbsp;getView(<strong><font color='#7f0055'>int</font></strong>&nbsp;position,&nbsp;View&nbsp;convertView,&nbsp;ViewGroup&nbsp;parent)&nbsp;{
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong><font color='#7f0055'>if</font></strong>&nbsp;(convertView&nbsp;==&nbsp;<strong><font color='#7f0055'>null</font></strong>)&nbsp;{
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mViewHolder&nbsp;=&nbsp;<strong><font color='#7f0055'>new</font></strong>&nbsp;ViewHolder();
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;convertView&nbsp;=&nbsp;mInflater.inflate(R.layout.place_row,&nbsp;parent,&nbsp;<strong><font color='#7f0055'>false</font></strong>);
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mViewHolder.txtRowTitle&nbsp;=&nbsp;(HelveticaNeueLight)&nbsp;convertView.findViewById(R.id.txtRowTitle);
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mViewHolder.txtFloorId&nbsp;=&nbsp;(DaxCEMedium)&nbsp;convertView.findViewById(R.id.txtRowID);
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mViewHolder.row&nbsp;=&nbsp;(RelativeLayout)&nbsp;convertView.findViewById(R.id.row);
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong><font color='#7f0055'>if</font></strong>(position%2&nbsp;==&nbsp;1)
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mViewHolder.row.setBackgroundColor(getBaseContext().getResources().getColor(R.color.transparent_white));
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;convertView.setTag(mViewHolder);
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}&nbsp;<strong><font color='#7f0055'>else</font></strong>&nbsp;{
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mViewHolder&nbsp;=&nbsp;(ViewHolder)&nbsp;convertView.getTag();
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mViewHolder.txtRowTitle.setText(areaList.get(position).getName());
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mViewHolder.txtFloorId.setText(mIndoorManager.getFloorLabel(areaList.get(position).getFloorId()));
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;convertView.setOnClickListener(<strong><font color='#7f0055'>new</font></strong>&nbsp;OnPlaceClickListener(position));
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong><font color='#7f0055'>return</font></strong>&nbsp;convertView;
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;}
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;<strong><font color='#7f0055'>private</font></strong>&nbsp;<strong><font color='#7f0055'>class</font></strong>&nbsp;OnPlaceClickListener&nbsp;<strong><font color='#7f0055'>implements</font></strong>&nbsp;View.OnClickListener{
+<br/>
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong><font color='#7f0055'>private</font></strong>&nbsp;<strong><font color='#7f0055'>final</font></strong>&nbsp;<strong><font color='#7f0055'>int</font></strong>&nbsp;position;
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong><font color='#7f0055'>public</font></strong>&nbsp;OnPlaceClickListener(<strong><font color='#7f0055'>int</font></strong>&nbsp;position)&nbsp;{
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong><font color='#7f0055'>this</font></strong>.position&nbsp;=&nbsp;position;
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br/>
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color='#646464'>@Override</font>
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong><font color='#7f0055'>public</font></strong>&nbsp;<strong><font color='#7f0055'>void</font></strong>&nbsp;onClick(View&nbsp;v)&nbsp;{
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;areaPosition&nbsp;=&nbsp;position;
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;queryRoute(position);
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;};
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;<font color='#3f7f5f'>/*&nbsp;getting&nbsp;list&nbsp;of&nbsp;the&nbsp;route&nbsp;nodes,&nbsp;away&nbsp;from&nbsp;the&nbsp;UI&nbsp;thread&nbsp;*/</font>
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;<strong><font color='#7f0055'>class</font></strong>&nbsp;AsyncQueryRoute&nbsp;<strong><font color='#7f0055'>extends</font></strong>&nbsp;AsyncTask<String,&nbsp;Integer,&nbsp;Void>{
+<br/>
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color='#646464'>@Override</font>
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong><font color='#7f0055'>protected</font></strong>&nbsp;Void&nbsp;doInBackground(String...&nbsp;args)&nbsp;{
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;HashMap<String,&nbsp;String>&nbsp;params&nbsp;=&nbsp;<strong><font color='#7f0055'>new</font></strong>&nbsp;HashMap<String,&nbsp;String>();
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;params.put(<font color='#2a00ff'>"from_lat"</font>,&nbsp;args[0]);
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;params.put(<font color='#2a00ff'>"from_lng"</font>,&nbsp;args[1]);
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;params.put(<font color='#2a00ff'>"from_floor"</font>,&nbsp;args[2]);
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;params.put(<font color='#2a00ff'>"to_lat"</font>,&nbsp;args[3]);
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;params.put(<font color='#2a00ff'>"to_lng"</font>,&nbsp;args[4]);
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;params.put(<font color='#2a00ff'>"to_floor"</font>,&nbsp;args[5]);
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color='#3f7f5f'>/*&nbsp;IFDataManager&nbsp;is&nbsp;a&nbsp;singleton&nbsp;class&nbsp;that,&nbsp;once&nbsp;we&nbsp;authorise&nbsp;user&nbsp;with&nbsp;ID&nbsp;and&nbsp;secret,&nbsp;is&nbsp;responsible&nbsp;for&nbsp;providing&nbsp;data&nbsp;from&nbsp;out&nbsp;API&nbsp;to&nbsp;the&nbsp;app&nbsp;client&nbsp;&nbsp;*/</font>
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IFDataManager.getInstance().queryRoute(params);
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;nodeList&nbsp;=&nbsp;IFDataManager.getInstance().getNodes();
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong><font color='#7f0055'>return</font></strong>&nbsp;<strong><font color='#7f0055'>null</font></strong>;
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color='#646464'>@Override</font>
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong><font color='#7f0055'>protected</font></strong>&nbsp;<strong><font color='#7f0055'>void</font></strong>&nbsp;onPostExecute(Void&nbsp;result)&nbsp;{
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong><font color='#7f0055'>super</font></strong>.onPostExecute(result);
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong><font color='#7f0055'>if</font></strong>(nodeList.size()&nbsp;>&nbsp;1){
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color='#3f7f5f'>/*&nbsp;pass&nbsp;list&nbsp;of&nbsp;all&nbsp;the&nbsp;nodes&nbsp;to&nbsp;the&nbsp;IFLocationManager&nbsp;if&nbsp;you&nbsp;want&nbsp;it&nbsp;to&nbsp;start&nbsp;&nbsp;*/</font>
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mLocationManager.startNavigation(nodeList);
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;navigationFlag&nbsp;=&nbsp;<strong><font color='#7f0055'>true</font></strong>;
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color='#3f7f5f'>/*&nbsp;add&nbsp;polyline&nbsp;to&nbsp;the&nbsp;map,&nbsp;provide&nbsp;current&nbsp;floor&nbsp;and&nbsp;current&nbsp;position&nbsp;*/</font>
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mPolyline&nbsp;=&nbsp;mMap.addPolyline(mLocationManager.getCurrentRoute(mUserPosition,&nbsp;mIndoorManager.getCurrentFloor()));
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;compassContainer.setVisibility(View.VISIBLE);
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bttnCancel.setVisibility(View.VISIBLE);
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mSensorManager.registerListener(ApiNaviActivity.<strong><font color='#7f0055'>this</font></strong>,&nbsp;mAccelerometer,&nbsp;SensorManager.SENSOR_DELAY_UI);
+<br/>
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LatLng&nbsp;d&nbsp;=&nbsp;<strong><font color='#7f0055'>new</font></strong>&nbsp;LatLng(nodeList.get(nodeList.size()&nbsp;-&nbsp;1).getLat(),&nbsp;nodeList.get(nodeList.size()&nbsp;-&nbsp;1).getLng());
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mEndRouteMarker&nbsp;=&nbsp;mMap.addMarker(<strong><font color='#7f0055'>new</font></strong>&nbsp;MarkerOptions().position(d)
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.icon(BitmapDescriptorFactory.fromResource(R.drawable.target_marker)));
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<strong><font color='#7f0055'>else</font></strong>{
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;showToast(getResources().getString(R.string.path_too_short));
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;navigationFlag&nbsp;=&nbsp;<strong><font color='#7f0055'>false</font></strong>;
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;overlayContainer.setVisibility(View.GONE);
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;}
+<br/>
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;<font color='#646464'>@Override</font>
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;<strong><font color='#7f0055'>public</font></strong>&nbsp;<strong><font color='#7f0055'>void</font></strong>&nbsp;onSensorChanged(SensorEvent&nbsp;event)&nbsp;{
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;azimut&nbsp;=&nbsp;event.values[0];
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;}
+<br/>
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;<font color='#646464'>@Override</font>
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;<strong><font color='#7f0055'>public</font></strong>&nbsp;<strong><font color='#7f0055'>void</font></strong>&nbsp;onAccuracyChanged(Sensor&nbsp;sensor,&nbsp;<strong><font color='#7f0055'>int</font></strong>&nbsp;accuracy)&nbsp;{
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;}&nbsp;&nbsp;&nbsp;&nbsp;
+<br/>}
+<br/><div style='text-align:right;BORDER-TOP: #ccc 1px dashed'><a href="http://www.togotutor.com/code-to-html/java-to-html.php" target="_blank">Code Formatted by ToGoTutor</a></div></div>
