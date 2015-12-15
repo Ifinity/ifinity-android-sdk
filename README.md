@@ -70,7 +70,7 @@ public void loadData() {
 
 ## Accessing local database
 
-After determining that your data was succesfully loaded, you can easily access it from your local database storage. To achieve that you need to call the data access methods of the single `DataManager` instance.
+After determining that your data was successfully loaded, you can easily access it from your local database storage. To achieve that you need to call the data access methods of the single `DataManager` instance.
 
 ```java
 // fetch areas for specific floor
@@ -99,7 +99,8 @@ IFContent venueContent = DataManager.getInstance().getContentForVenue(venueId, g
 ## Entering the venue
 
 For detection of venues in physical world you need to access the single instance of the `IfinityBluetoothManager` class. This class will provide you with the information about nearby beacons state, venues you’re in, and the floor you’re on.
-Detecting many-beacons venue floor
+
+## Detecting many-beacons venue floor
 
 ```java
 private int mVenueId = 0;
@@ -290,4 +291,4 @@ IfinitySDK has many types of supported notifications, but as a developer, you sh
 
 ## Sample project
 
-Project described above is available online at http://gitlab.getifinity.com/ifinity/sdksample
+Project described above will be available shortly on our github account
