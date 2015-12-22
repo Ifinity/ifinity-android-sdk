@@ -291,4 +291,4 @@ IfinitySDK has many types of supported notifications, but as a developer, you sh
 
 ## Sample project
 
-Project described above will be available shortly on our github account
+Project described above is available online at https://github.com/ifinity/ifinity-android-example
